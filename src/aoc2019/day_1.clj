@@ -120,10 +120,7 @@
 
 (defn part-2 [i]
   (->> i
-    (map fuel-for)
-    (map #(conj '() %))
-    (map fuel-series-for)
-    flatten
+    (mapcat (comp fuel-series-for list fuel-for))
     (reduce +)
     ))
 
