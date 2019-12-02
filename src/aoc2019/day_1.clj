@@ -103,14 +103,19 @@
    75777
    107333])
 
-(defn fuel-for [mass]
-  (- (int (/ mass 3)) 2)
-  )
+(defn fuel-for
+  "fuel needed for a given mass"
+  [mass]
+  (- (int (/ mass 3)) 2))
 
-(defn fuel-series-for [masses]
-  (let [fuel-for-fuel (fuel-for (first masses))]
-    (if (<= fuel-for-fuel 0) masses
-        (recur (cons fuel-for-fuel masses)))))
+(defn fuel-series-for
+  "series of fuel amounts for a given amount of fuel"
+  ([masses]
+   (if (not (seq? masses)) 
+     (recur (list masses))
+     (let [fuel-for-fuel (fuel-for (first masses))]
+       (if (<= fuel-for-fuel 0) masses
+           (recur (cons fuel-for-fuel masses)))))))
 
 (defn part-1 [i]
   (->> i
@@ -120,7 +125,7 @@
 
 (defn part-2 [i]
   (->> i
-    (mapcat (comp fuel-series-for list fuel-for))
+    (mapcat (comp fuel-series-for fuel-for))
     (reduce +)
     ))
 
