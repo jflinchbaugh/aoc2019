@@ -30,8 +30,8 @@
   [[sx sy] [dx dy]]
   [(+ sx dx) (+ sy dy)])
 
-(defn nodes
-  "build a series of absolute grip positions from a wire string"
+(defn nodes-for-wire
+  "build a series of absolute grid positions from a wire string"
   [wire]
   (->>
    wire
@@ -45,20 +45,13 @@
   [[ox oy] [x y]]
   (+ (Math/abs (- ox x)) (Math/abs (- oy y))))
 
-(defn part-1 []
-  (let [nodes-1 (-> wire-1 nodes set)
-        nodes-2 (-> wire-2 nodes set)
-        shared-nodes (set/intersection nodes-1 nodes-2)]
-    (->> shared-nodes
-         (map (partial manhattan-dist [0 0]))
-         sort
-         rest ; drop first distance, since it's 0 0
-         first)))
-
 (defn wire-dist
   "measure distance to a node by wire nodes"
   [nodes dest]
-  (count (take-while #(not= dest %) nodes)))
+  (->>
+    nodes
+    (take-while #(not= dest %))
+    count))
 
 (defn total-wire-dist
   "measure distance to a node and back using both wire paths"
@@ -67,9 +60,23 @@
         dist-2 (wire-dist nodes-2 dest)]
     (+ dist-1 dist-2)))
 
-(defn part-2 []
-  (let [nodes-1 (-> wire-1 nodes)
-        nodes-2 (-> wire-2 nodes)
+(defn part-1
+  "shortest manhattan distance of nodes to origin"
+  []
+  (let [nodes-1 (-> wire-1 nodes-for-wire set)
+        nodes-2 (-> wire-2 nodes-for-wire set)
+        shared-nodes (set/intersection nodes-1 nodes-2)]
+    (->> shared-nodes
+      (map (partial manhattan-dist [0 0]))
+      sort
+      rest ; drop first distance, since it's 0 0
+      first)))
+
+(defn part-2
+  "shortest circuit distance of nodes to origin"
+  []
+  (let [nodes-1 (-> wire-1 nodes-for-wire)
+        nodes-2 (-> wire-2 nodes-for-wire)
         shared-nodes (into [] (set/intersection (set nodes-1) (set nodes-2)))]
     (->>
      shared-nodes
@@ -79,7 +86,6 @@
      first)))
 
 (comment
-
   (part-1)
 
   (part-2)
