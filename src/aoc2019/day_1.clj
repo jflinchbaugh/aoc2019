@@ -111,7 +111,7 @@
 (defn fuel-series-for
   "series of fuel amounts for a given amount of fuel"
   ([masses]
-   (if (not (seq? masses)) 
+   (if-not (seq? masses) 
      (recur (list masses))
      (let [fuel-for-fuel (fuel-for (first masses))]
        (if (<= fuel-for-fuel 0) masses

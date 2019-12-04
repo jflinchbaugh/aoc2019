@@ -75,9 +75,9 @@
 (defn part-2
   "shortest circuit distance of nodes to origin"
   []
-  (let [nodes-1 (-> wire-1 nodes-for-wire)
-        nodes-2 (-> wire-2 nodes-for-wire)
-        shared-nodes (into [] (set/intersection (set nodes-1) (set nodes-2)))]
+  (let [nodes-1 (nodes-for-wire wire-1)
+        nodes-2 (nodes-for-wire wire-2)
+        shared-nodes (vec (set/intersection (set nodes-1) (set nodes-2)))]
     (->>
      shared-nodes
      (map (partial total-wire-dist nodes-1 nodes-2))
