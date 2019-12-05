@@ -42,7 +42,7 @@
        (nil? op-name)
        {:state :error-bad-op :outputs (conj outputs :error-bad-op)} 
 
-       ; operations
+       ; valid operations
        (= op-name :halt)
        {:state state :outputs outputs}
 
