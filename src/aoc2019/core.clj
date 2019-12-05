@@ -40,7 +40,7 @@
        {:state :error-no-op :outputs (conj outputs :error-no-op)} 
 
        (nil? op-name)
-       {:state :error-bad-op :outputs (conj outputs :error-bad-op)} ; exit with error state
+       {:state :error-bad-op :outputs (conj outputs :error-bad-op)} 
 
        ; operations
        (= op-name :halt)
