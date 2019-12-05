@@ -1,22 +1,50 @@
 (ns aoc2019.core)
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
+(defn name [op]
+  (let [ops {99 :halt, 1 :add, 2 :multiply, 3 :in, 4 :out}]
+    (if op (ops (mod op 100)))))
+
+(defn mode [op pos]
+  (get [:position :immediate] (if op (-> op (/ pos) int (mod 10)))))
+
+(defn get-val [state mode val]
+  (if (= :immediate mode)
+    val
+    (get state val)))
 
 (defn run-int-code
-  "run the list of instructions through int-code computer"
-  ([list] (run-int-code 0 list))
-  ([pos list]
-   (let [instructions (->> list (drop pos) (take 4))
-         [op pa pb po] instructions
-         a (get list pa)
-         b (get list pb)]
+  "run the int-code computer on a given machine state with inputs and outputs"
+  ([state] (:state (run-int-code 0 state [] [])))
+  ([state inputs] (:outputs (run-int-code 0 state inputs [])))
+  ([pos state inputs outputs]
+   (let [instructions (->> state (drop pos) (take 4))
+         [op pa pb pc] instructions
+         op-name (name op)
+         ma (mode op 100)
+         mb (mode op 1000)
+         mc (mode op 10000)
+         a (get-val state ma pa)
+         b (get-val state mb pb)
+         c (get-val state mc pc)]
      (cond
-       (nil? op) :error-no-op
-       (= op 99) list
-       (= op 1) (recur (+ 4 pos) (assoc list po (biginteger (+' a b))))
-       (= op 2) (recur (+ 4 pos) (assoc list po (biginteger (*' a b))))
-       :else :error-bad-op
+       (nil? op)
+       {:state :error-no-op :outputs outputs} ; exit with error state
+
+       (= op-name :halt)
+       {:state state :outputs outputs}
+
+       (= op-name :add)
+       (recur (+ 4 pos) (assoc state pc (biginteger (+' a b))) inputs outputs)
+
+       (= op-name :multiply)
+       (recur (+ 4 pos) (assoc state pc (biginteger (*' a b))) inputs outputs)
+
+       (= op-name :in )
+       (recur (+ 2 pos) (assoc state pa (first inputs)) (rest inputs) outputs)
+
+       (= op-name :out)
+       (recur (+ 2 pos) state inputs (conj outputs a))
+
+       :else
+       {:state :error-bad-op :outputs outputs} ; exit with error state
        ))))
