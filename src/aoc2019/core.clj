@@ -47,10 +47,10 @@
        {:state state :outputs outputs}
 
        (= op-name :add)
-       (recur (+ 4 pos) (assoc state pc (biginteger (+' a b))) inputs outputs)
+       (recur (+ 4 pos) (assoc state pc (+' a b)) inputs outputs)
 
        (= op-name :multiply)
-       (recur (+ 4 pos) (assoc state pc (biginteger (*' a b))) inputs outputs)
+       (recur (+ 4 pos) (assoc state pc (*' a b)) inputs outputs)
 
        (= op-name :in )
        (recur (+ 2 pos) (assoc state pa (first inputs)) (rest inputs) outputs)
