@@ -12,17 +12,28 @@
       [2,3,0,3,99] :becomes [2,3,0,6,99]
       [2,4,4,5,99,0] :becomes [2,4,4,5,99,9801]
       [1,1,1,4,99,5,6,0,99] :becomes [30,1,1,4,2,5,6,0,99]))
+
+  (testing "error states in output"
+    (are [start-state _ outputs] (= outputs (run-int-code start-state []))
+      [] :outputs [:error-no-op]
+      [98] :outputs [:error-bad-op]
+      [104,10] :outputs [10 :error-no-op]
+      [104,10,98] :outputs [10 :error-bad-op]
+      ))
+
   (testing "examples from aoc day 5 - IO"
     (are [initial-state _ inputs _ outputs]
         (= outputs (run-int-code initial-state inputs))
       [3,0,4,0,99] :with [1] :outputs [1]
       [3,0,3,1,1,0,1,0,4,0,99] :with [10,12] :outputs [22]
       ))
+
   (testing "examples from aoc day 5 - parameter modes"
     (are [initial-state _ inputs _ outputs]
         (= outputs (run-int-code initial-state inputs))
       [1101,100,-1,0,4,0,99] :with [] :outputs [99]
       ))
+
   (testing "examples from aoc day 5/part 2 - flow control"
     (are [initial-state _ inputs _ outputs]
         (= outputs (run-int-code initial-state inputs))

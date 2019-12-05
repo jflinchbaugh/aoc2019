@@ -35,9 +35,14 @@
          b (get-val state mb pb)
          c (get-val state mc pc)]
      (cond
+       ; exits for errors
        (nil? op)
-       {:state :error-no-op :outputs outputs} ; exit with error state
+       {:state :error-no-op :outputs (conj outputs :error-no-op)} 
 
+       (nil? op-name)
+       {:state :error-bad-op :outputs (conj outputs :error-bad-op)} ; exit with error state
+
+       ; operations
        (= op-name :halt)
        {:state state :outputs outputs}
 
@@ -65,6 +70,4 @@
        (= op-name :equals)
        (recur (+ pos 4) (assoc state pc (if (= a b) 1 0)) inputs outputs)
 
-       :else
-       {:state :error-bad-op :outputs outputs} ; exit with error state
        ))))
