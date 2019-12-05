@@ -1,7 +1,15 @@
 (ns aoc2019.core)
 
 (defn name [op]
-  (let [ops {99 :halt, 1 :add, 2 :multiply, 3 :in, 4 :out}]
+  (let [ops {99 :halt,
+             1 :add,
+             2 :multiply,
+             3 :in,
+             4 :out,
+             5 :jump-if-true
+             6 :jump-if-false
+             7 :less-than
+             8 :equals}]
     (if op (ops (mod op 100)))))
 
 (defn mode [op pos]
@@ -44,6 +52,18 @@
 
        (= op-name :out)
        (recur (+ 2 pos) state inputs (conj outputs a))
+
+       (= op-name :jump-if-true)
+       (recur (if (zero? a) (+ 3 pos) b) state inputs outputs)
+
+       (= op-name :jump-if-false)
+       (recur (if-not (zero? a) (+ 3 pos) b) state inputs outputs)
+
+       (= op-name :less-than)
+       (recur (+ pos 4) (assoc state pc (if (< a b) 1 0)) inputs outputs)
+
+       (= op-name :equals)
+       (recur (+ pos 4) (assoc state pc (if (= a b) 1 0)) inputs outputs)
 
        :else
        {:state :error-bad-op :outputs outputs} ; exit with error state
