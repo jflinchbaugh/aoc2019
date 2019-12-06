@@ -11,8 +11,8 @@
 
 (comment 
 
-(part-1)
+  (time (part-1))
 
-(part-2)
+  (time (part-2))
 
 )

@@ -71,3 +71,8 @@
        (recur (+ pos 4) (assoc state pc (if (= a b) 1 0)) inputs outputs)
 
        ))))
+
+(defn map-val
+  "apply a fn to values of a hashmap"
+  [f m]
+  (into {} (map (fn [[k v]] [k (f v)]) m)))
