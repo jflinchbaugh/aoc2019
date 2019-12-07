@@ -54,7 +54,7 @@
 
        (= op-name :in )
        (if (empty? inputs)
-         [pos state inputs outputs]
+         {:continue [pos state inputs outputs] :state state :outputs outputs}
          (recur (+ 2 pos) (assoc state pa (first inputs)) (rest inputs) outputs))
 
        (= op-name :out)

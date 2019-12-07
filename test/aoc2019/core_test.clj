@@ -54,7 +54,9 @@
       ))
 
     (testing "day 7 - IO with continuation when input not available"
-      (is (= [2 [10,0,3,1,1,0,1,0,4,0,99] [] []]
+      (is (= {:continue [2 [10,0,3,1,1,0,1,0,4,0,99] [] []]
+              :outputs []
+              :state [10,0,3,1,1,0,1,0,4,0,99]}
             (run-int-code 0 [3,0,3,1,1,0,1,0,4,0,99] [10] [])))
       (is (= [22]
             (:outputs (apply run-int-code [2 [10,0,3,1,1,0,1,0,4,0,99] [12] []]))))))
