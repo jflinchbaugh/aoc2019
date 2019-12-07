@@ -54,12 +54,17 @@
       ))
 
     (testing "day 7 - IO with continuation when input not available"
-      (is (= {:continue [2 [10,0,3,1,1,0,1,0,4,0,99] [] []]
-              :outputs []
-              :state [10,0,3,1,1,0,1,0,4,0,99]}
-            (run-int-code 0 [3,0,3,1,1,0,1,0,4,0,99] [10] [])))
-      (is (= [22]
-            (:outputs
-             (apply
-               run-int-code
-               [2 [10,0,3,1,1,0,1,0,4,0,99] [12] []]))))))
+      (let [x 1
+            start-state [3,0,3,1,1,0,1,0,4,0,99]
+            io-pause-state (assoc start-state 0 10)]
+        (is (= {:continue [2 io-pause-state [] []]
+                :outputs []
+                :state io-pause-state}
+              (run-int-code 0 start-state [10] []))
+          "run with too little input, so it returns a paused state")
+        (is (= [22]
+              (:outputs
+               (apply
+                 run-int-code
+                 [2 io-pause-state [12] []])))
+          "run from the paused state, and it finishes"))))
