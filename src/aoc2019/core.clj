@@ -1,6 +1,6 @@
 (ns aoc2019.core)
 
-(defn name [op]
+(defn name-for-number-op [op]
   (let [ops {99 :halt,
              1 :add,
              2 :multiply,
@@ -27,7 +27,7 @@
   ([pos state inputs outputs]
    (let [instructions (->> state (drop pos) (take 4))
          [op pa pb pc] instructions
-         op-name (name op)
+         op-name (name-for-number-op op)
          ma (mode op 100)
          mb (mode op 1000)
          mc (mode op 10000)
@@ -53,7 +53,9 @@
        (recur (+ 4 pos) (assoc state pc (*' a b)) inputs outputs)
 
        (= op-name :in )
-       (recur (+ 2 pos) (assoc state pa (first inputs)) (rest inputs) outputs)
+       (if (empty? inputs)
+         [pos state inputs outputs]
+         (recur (+ 2 pos) (assoc state pa (first inputs)) (rest inputs) outputs))
 
        (= op-name :out)
        (recur (+ 2 pos) state inputs (conj outputs a))
