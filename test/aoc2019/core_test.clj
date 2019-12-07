@@ -53,7 +53,7 @@
 
       ))
 
-    (testing "day 7 - IO with continuation when not available"
+    (testing "day 7 - IO with continuation when input not available"
       (is (= [2 [10,0,3,1,1,0,1,0,4,0,99] [] []]
             (run-int-code 0 [3,0,3,1,1,0,1,0,4,0,99] [10] [])))
       (is (= [22]
