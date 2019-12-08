@@ -11,35 +11,33 @@
   (combo/permutations (range 5 10)))
 
 (defn run-once [p i]
-  (run-int-code program [p i]))
+  (run-int-code 0 program [p i] []))
 
 (defn run-series [[p0 p1 p2 p3 p4]]
   (->>
     0
     (run-once p0)
+    :outputs
     first
     (run-once p1)
+    :outputs
     first
     (run-once p2)
+    :outputs
     first
     (run-once p3)
+    :outputs
     first
     (run-once p4)
+    :outputs
     first
     ))
 
 (defn part-1 [] 
   (apply max (map run-series all-phases)))
 
-(defn part-2 [] 
-  (apply max (map run-series all-loopback-phases)))
-
 (comment
 
-  (part-1)
-
-  (part-2)
-
-  (run-int-code program [5 0] )
+  (part-1) 
 
   )
