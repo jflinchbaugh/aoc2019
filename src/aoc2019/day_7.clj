@@ -15,7 +15,9 @@
   ([pos pgm phase input]
    (run-int-code pos pgm [phase input] [])))
 
-(defn run-series [pgm [p0 p1 p2 p3 p4]]
+(defn run-series
+  "run the series of computers in the given phases"
+  [pgm [p0 p1 p2 p3 p4]]
   (->>
     0
     (run-once 0 pgm p0)
