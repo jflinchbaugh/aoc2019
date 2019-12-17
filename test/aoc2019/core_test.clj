@@ -67,4 +67,31 @@
                (apply
                  run-int-code
                  [2 io-pause-state [12] []])))
-          "run from the paused state, and it finishes"))))
+          "run from the paused state, and it finishes")))
+
+  (testing "examples from aoc day 9/part 1 - relative mode"
+    (are [initial-state _ outputs]
+        (= outputs (run-int-code initial-state []))
+      [109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99]
+      :outputs [109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99]
+
+      [1102,34915192,34915192,7,4,7,99,0]
+      :outputs [(* 34915192 34915192)]
+
+      [104,1125899906842624,99]
+      :outputs [1125899906842624]
+      )))
+
+(deftest test-grow
+  (testing "grow list to a new size"
+    (is (= [1 2 0] (grow [1 2] 2))))
+  (testing "grow list to a max size"
+    (is (= [1 2 0 0 0 0 0 0 0 0 0] (grow [1 2]  10 2))))
+  (testing "don't grow list unnecessarily"
+    (is (= [1 2 3 4] (grow [1 2 3 4] 2)))))
+
+(deftest test-mode
+  (testing "decode mode"
+    (is (= :position (mode 1 100)))
+    (is (= :immediate (mode 101 100)))
+    (is (= :relative (mode 201 100)))))
