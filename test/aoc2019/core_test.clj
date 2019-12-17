@@ -95,3 +95,11 @@
     (is (= :position (mode 1 100)))
     (is (= :immediate (mode 101 100)))
     (is (= :relative (mode 201 100)))))
+
+(deftest test-get-addr
+  (testing "get-addr calculates for mode"
+    (is (= 0 (get-addr 0 :position 0)))
+    (is (= 1 (get-addr 0 :position 1)))
+    (is (= 0 (get-addr 1 :position 0)))
+    (is (= 1 (get-addr 1 :relative 0)))
+    ))

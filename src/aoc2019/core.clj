@@ -26,6 +26,11 @@
       (apply max (cons (count vector) (map inc positions)))
       (concat vector (repeat 0)))))
 
+(defn get-addr
+  "calculate an address from base and val for a mode"
+  [base mode val]
+  (+ (if (= :relative mode) base 0) val))
+
 (defn get-val [state base mode val]
   (if (= :immediate mode)
    val
@@ -66,10 +71,20 @@
        {:state state :outputs outputs}
 
        (= op-name :add)
-       (recur (+ 4 pos) base (grow-assoc state pc (+' a b)) inputs outputs)
+       (recur
+         (+ 4 pos)
+         base
+         (grow-assoc state (get-addr base mc pc) (+' a b))
+         inputs
+         outputs)
 
        (= op-name :multiply)
-       (recur (+ 4 pos) base (grow-assoc state pc (*' a b)) inputs outputs)
+       (recur
+         (+ 4 pos)
+         base
+         (grow-assoc state (get-addr base mc pc) (*' a b))
+         inputs
+         outputs)
 
        (= op-name :in )
        (if (empty? inputs)
@@ -77,7 +92,7 @@
          (recur
            (+ 2 pos)
            base
-           (grow-assoc state pa (first inputs))
+           (grow-assoc state (get-addr base ma pa) (first inputs))
            (rest inputs)
            outputs))
 
@@ -94,7 +109,7 @@
        (recur
          (+ pos 4)
          base
-         (grow-assoc state pc (if (< a b) 1 0))
+         (grow-assoc state (get-addr base mc pc) (if (< a b) 1 0))
          inputs
          outputs)
 
@@ -102,7 +117,7 @@
        (recur
          (+ pos 4)
          base
-         (grow-assoc state pc (if (= a b) 1 0))
+         (grow-assoc state (get-addr base mc pc) (if (= a b) 1 0))
          inputs
          outputs)
 
