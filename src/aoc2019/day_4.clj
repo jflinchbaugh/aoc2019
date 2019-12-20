@@ -6,25 +6,20 @@
 
 (defn parse [s] (map (comp biginteger str) (str s)))
 
-(defn freqs [lst]
-  (let [s (->> lst (group-by identity) (map (fn [[k v]] [k (count v)])))]
-    s)
-  )
-
 (defn good-for-1?
   "is it a good candidate for part 1"
   [c]
   (let [lst (parse c)]
     (and
       (apply <= lst)
-      (->> lst freqs (some #(-> % second (>= 2)))))))
+      (->> lst frequencies (some #(-> % second (>= 2)))))))
 
 (defn good-for-2?
   "is it a good candidate for part 2"
   [c]
   (and
     (good-for-1? c)
-    (->> c parse freqs (some #(-> % second (= 2))))))
+    (->> c parse frequencies (some #(-> % second (= 2))))))
 
 (defn part-1 []
   (->> input (filter good-for-1?) count))
