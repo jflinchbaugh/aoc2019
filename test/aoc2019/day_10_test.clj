@@ -41,10 +41,32 @@
 
 (deftest test-optimal-location
   (testing "optimal-location"
-    (is (= [[3 4] 8] (optimal-location "
+    (let [res (optimal-location "
       .#..#
       .....
       #####
       ....#
       ...##
-")))))
+      ")]
+      (is (= [3 4] (first res)))
+      (is (= 8 (count (second res)))))))
+
+(deftest test-direction->angle
+  (testing "direction->sample to origin is nil"
+    (is (nil? (direction->angle [0 0 :inf]))))
+  (testing "direction->angle"
+    (are [angle d]
+        (= (* angle Math/PI 2) (direction->angle d))
+      0 [0 -1 :inf]
+      1/8 [1 -1 -1]
+      1/4 [1 0 0]
+      3/8 [1 1 1]
+      1/2 [0 1 :inf]
+      5/8 [-1 1 -1]
+      3/4 [-1 0 0]
+      7/8 [-1 -1 1]
+      )))
+
+(deftest test-unwind
+  (testing "unwwind"
+    (is (= [1 3 5 2 4] (unwind '((1 2) (3 4) (5)))))))
