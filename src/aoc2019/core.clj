@@ -1,4 +1,5 @@
-(ns aoc2019.core)
+(ns aoc2019.core
+  (:require [clojure.string :as str]))
 
 (defn name-for-number-op [op]
   (let [ops {99 :halt,
@@ -130,3 +131,12 @@
   "apply a fn to values of a hashmap"
   [f m]
   (into {} (map (fn [[k v]] [k (f v)]) m)))
+
+(defn load-int-code [file-name]
+  (->
+    file-name
+    slurp
+    str/trim
+    (str/split #",")
+    (->>
+      (map (comp int biginteger)))))
