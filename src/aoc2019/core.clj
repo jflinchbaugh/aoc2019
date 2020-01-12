@@ -24,7 +24,7 @@
   [vector & positions]
   (vec
     (take
-      (apply max (cons (count vector) (map (comp inc bigint) positions)))
+      (apply max (cons (count vector) (map (comp inc' bigint) positions)))
       (concat vector (repeat 0)))))
 
 (defn get-addr
