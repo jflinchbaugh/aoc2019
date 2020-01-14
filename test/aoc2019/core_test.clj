@@ -93,7 +93,7 @@
     (let [res (grow [1] 40000000)]
       (is (= 40000001 (count res)))
       (is (= 1 (first res)))
-      (is (->> res rest (every? #{1})))))
+      (is (->> res rest (every? #{0})))))
   )
 
 (deftest test-mode
