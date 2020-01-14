@@ -86,15 +86,19 @@
   (testing "grow list to a new size"
     (is (= [1 2 0] (grow [1 2] 2))))
   (testing "grow list to a max size"
-    (is (= [1 2 0 0 0 0 0 0 0 0 0] (grow [1 2]  10 2))))
+    (is (= [1 2 0 0 0 0 0 0 0 0 0] (grow [1 2] 10 2))))
   (testing "don't grow list unnecessarily"
-    (is (= [1 2 3 4] (grow [1 2 3 4] 2)))))
+    (is (= [1 2 3 4] (grow [1 2 3 4] 2))))
+  (testing "large growth"
+    (is (= 40000001 (count (grow [1] 40000000)))))
+  )
 
 (deftest test-mode
   (testing "decode mode"
     (is (= :position (mode 1 100)))
     (is (= :immediate (mode 101 100)))
-    (is (= :relative (mode 201 100)))))
+    (is (= :relative (mode 201 100)))
+    ))
 
 (deftest test-get-addr
   (testing "get-addr calculates for mode"
