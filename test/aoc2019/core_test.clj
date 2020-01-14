@@ -90,7 +90,10 @@
   (testing "don't grow list unnecessarily"
     (is (= [1 2 3 4] (grow [1 2 3 4] 2))))
   (testing "large growth"
-    (is (= 40000001 (count (grow [1] 40000000)))))
+    (let [res (grow [1] 40000000)]
+      (is (= 40000001 (count res)))
+      (is (= 1 (first res)))
+      (is (->> res rest (every? #{1})))))
   )
 
 (deftest test-mode
