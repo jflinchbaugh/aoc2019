@@ -139,4 +139,4 @@
     str/trim
     (str/split #",")
     (->>
-      (map (comp int biginteger)))))
+      (map (comp biginteger)))))
